@@ -95,7 +95,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		awsBedrockCustomModelBaseId,
 		vertexProjectId,
 		vertexRegion,
-                        openAiBaseUrl: openAiBaseUrl || DEFAULT_OPENAI_BASE_URL,
+		openAiBaseUrlRaw,
 		openAiApiKey,
 		openAiModelId,
 		openAiModelInfo,
@@ -255,8 +255,9 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getGlobalState(context, "enableCheckpointsSetting") as Promise<boolean | undefined>,
 		getGlobalState(context, "mcpMarketplaceEnabled") as Promise<boolean | undefined>,
 		getGlobalState(context, "globalWorkflowToggles") as Promise<ClineRulesToggles | undefined>,
-		fetch,
 	])
+
+	const openAiBaseUrl = openAiBaseUrlRaw || DEFAULT_OPENAI_BASE_URL
 
 	let apiProvider: ApiProvider
 	if (storedApiProvider) {
@@ -264,12 +265,12 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 	} else {
 		// Either new user or legacy user that doesn't have the apiProvider stored in state
 		// (If they're using OpenRouter or Bedrock, then apiProvider state will exist)
-                if (apiKey) {
-                        apiProvider = "anthropic"
-                } else {
-                        // New users default to OpenAI compatible with local endpoint
-                        apiProvider = "openai"
-                }
+		if (apiKey) {
+			apiProvider = "anthropic"
+		} else {
+			// New users default to OpenAI compatible with local endpoint
+			apiProvider = "openai"
+		}
 	}
 
 	const localClineRulesToggles = (await getWorkspaceState(context, "localClineRulesToggles")) as ClineRulesToggles
@@ -386,7 +387,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		previousModeAwsBedrockCustomSelected,
 		previousModeAwsBedrockCustomModelBaseId,
 		mcpMarketplaceEnabled: mcpMarketplaceEnabled,
-                telemetrySetting: telemetrySetting ?? "disabled",
+		telemetrySetting: telemetrySetting ?? "disabled",
 		planActSeparateModelsSetting,
 		enableCheckpointsSetting: enableCheckpointsSetting,
 		shellIntegrationTimeout: shellIntegrationTimeout || 4000,
