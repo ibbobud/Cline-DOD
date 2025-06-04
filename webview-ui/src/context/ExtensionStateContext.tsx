@@ -156,7 +156,7 @@ export const ExtensionStateContextProvider: React.FC<{
 		browserSettings: DEFAULT_BROWSER_SETTINGS,
 		chatSettings: DEFAULT_CHAT_SETTINGS,
 		platform: DEFAULT_PLATFORM,
-		telemetrySetting: "unset",
+                telemetrySetting: "disabled",
 		distinctId: "",
 		planActSeparateModelsSetting: true,
 		enableCheckpointsSetting: true,

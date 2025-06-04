@@ -1,5 +1,7 @@
 import type { LanguageModelChatSelector } from "../api/providers/types"
 
+export const DEFAULT_OPENAI_BASE_URL = "http://localhost:8000/v1"
+
 export type ApiProvider =
 	| "anthropic"
 	| "openrouter"

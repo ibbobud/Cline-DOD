@@ -27,7 +27,6 @@ import ChatRow from "@/components/chat/ChatRow"
 import ChatTextArea from "@/components/chat/ChatTextArea"
 import QuotedMessagePreview from "@/components/chat/QuotedMessagePreview"
 import TaskHeader from "@/components/chat/TaskHeader"
-import TelemetryBanner from "@/components/common/TelemetryBanner"
 import { unified } from "unified"
 import remarkStringify from "remark-stringify"
 import rehypeRemark from "rehype-remark"
@@ -1074,7 +1073,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						flexDirection: "column",
 						paddingBottom: "10px",
 					}}>
-					{telemetrySetting === "unset" && <TelemetryBanner />}
+
 
 					{showAnnouncement && <Announcement version={version} hideAnnouncement={hideAnnouncement} />}
 

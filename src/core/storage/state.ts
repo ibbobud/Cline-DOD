@@ -3,7 +3,7 @@ import { DEFAULT_CHAT_SETTINGS, OpenAIReasoningEffort } from "@shared/ChatSettin
 import { DEFAULT_BROWSER_SETTINGS } from "@shared/BrowserSettings"
 import { DEFAULT_AUTO_APPROVAL_SETTINGS } from "@shared/AutoApprovalSettings"
 import { GlobalStateKey, SecretKey } from "./state-keys"
-import { ApiConfiguration, ApiProvider, BedrockModelId, ModelInfo } from "@shared/api"
+import { ApiConfiguration, ApiProvider, BedrockModelId, ModelInfo, DEFAULT_OPENAI_BASE_URL } from "@shared/api"
 import { HistoryItem } from "@shared/HistoryItem"
 import { AutoApprovalSettings } from "@shared/AutoApprovalSettings"
 import { BrowserSettings } from "@shared/BrowserSettings"
@@ -95,7 +95,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		awsBedrockCustomModelBaseId,
 		vertexProjectId,
 		vertexRegion,
-		openAiBaseUrl,
+                        openAiBaseUrl: openAiBaseUrl || DEFAULT_OPENAI_BASE_URL,
 		openAiApiKey,
 		openAiModelId,
 		openAiModelInfo,
@@ -264,12 +264,12 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 	} else {
 		// Either new user or legacy user that doesn't have the apiProvider stored in state
 		// (If they're using OpenRouter or Bedrock, then apiProvider state will exist)
-		if (apiKey) {
-			apiProvider = "anthropic"
-		} else {
-			// New users should default to openrouter, since they've opted to use an API key instead of signing in
-			apiProvider = "openrouter"
-		}
+                if (apiKey) {
+                        apiProvider = "anthropic"
+                } else {
+                        // New users default to OpenAI compatible with local endpoint
+                        apiProvider = "openai"
+                }
 	}
 
 	const localClineRulesToggles = (await getWorkspaceState(context, "localClineRulesToggles")) as ClineRulesToggles
@@ -386,7 +386,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		previousModeAwsBedrockCustomSelected,
 		previousModeAwsBedrockCustomModelBaseId,
 		mcpMarketplaceEnabled: mcpMarketplaceEnabled,
-		telemetrySetting: telemetrySetting || "unset",
+                telemetrySetting: telemetrySetting ?? "disabled",
 		planActSeparateModelsSetting,
 		enableCheckpointsSetting: enableCheckpointsSetting,
 		shellIntegrationTimeout: shellIntegrationTimeout || 4000,
